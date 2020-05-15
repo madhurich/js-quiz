@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html>
+<meta content="width=device-width, initial-scale=1">
+<link rel="stylesheet" type="text/css" href="style.css">
+
+<body>
+    <div id="quiz">
+        <div>
+            <h3>What is your fav color ?</h3>
+            <input type="radio" name="color" value="blue"><label for="blue">blue</label>
+            <input type="radio" name="color" value="red"><label for="red">red</label>
+            <input type="radio" name="color" value="green"><label for="green">green</label>
+        </div>
+        <div>
+            <h3>What is your fav game ?</h3>
+            <input type="radio" name="game" value="cricket"><label for="cricket">cricket</label>
+            <input type="radio" name="game" value="footbal"><label for="footbal">footbal</label>
+            <input type="radio" name="game" value="badminton"><label for="badminton">badminton</label>
+        </div>
+        <div>
+            <h3>What is your fav food ?</h3>
+            <input type="radio" name="food" value="pulihora"><label for="pulihora">pulihora</label>
+            <input type="radio" name="food" value="dosa"><label for="dosa">dosa</label>
+            <input type="radio" name="food" value="idli"><label for="idli">idli</label>
+        </div>
+        <button type="submit">Submit</button>
+    </div>
+
+    <div id="result">
+        <p id="score"></p>
+    </div>
+
+    <script>
+        var scorePara = document.getElementById('score');
+        var resultDiv = document.getElementById('result');
+        var userAnswers = [
+            { name: 'color', value: '' },
+            { name: 'food', value: '' },
+            { name: 'game', value: '' }
+        ];
+        var correctAnswers = [
+            { name: 'color', value: 'blue' },
+            { name: 'food', value: 'dosa' },
+            { name: 'game', value: 'badminton' }
+        ];
+        var totalQuestions = correctAnswers.length;
+        var numberOfCorrect = 0;
+        var numberOfWrong = 0;
+        var colors = document.querySelectorAll('input[name="color"]');
+        var foods = document.querySelectorAll('input[name="food"]');
+        var games = document.querySelectorAll('input[name="game"]');
+        document.querySelectorAll('button[type="submit"]')[0]
+            .addEventListener('click', function (e) {
+                getChecked('color', colors);
+                getChecked('food', foods);
+                getChecked('game', games);
+
+                numberOfCorrect = getCorrectAnsCount(correctAnswers, userAnswers);
+                numberOfWrong = totalQuestions - numberOfCorrect;
+                var percent = ((numberOfCorrect/totalQuestions) * 100).toFixed(2);
+                userAnswers = [];
+                resultDiv.style.display = 'block';
+                scorePara.innerHTML = 'You answered ' + numberOfCorrect + ' correctly and scored ' + percent + '%';
+            });
+
+        function getChecked(grpName, inputs) {
+            for (var i = 0; i < inputs.length; i++) {
+                if (inputs[i].checked === true) {
+                    var found;
+                    userAnswers.forEach(function(elem, index) {
+                        if(elem.name === grpName) found = index;
+                    });
+                    userAnswers[found ] = { name: grpName, value: inputs[i].value };
+                }
+            }
+        }
+
+        function getCorrectAnsCount(correct, users) {
+            var correctCount = 0;
+            for (var i = 0; i < correct.length; i++) {
+                document.querySelectorAll('label[for=' + correct[i].value +']')[0].style.backgroundColor = '#b3e6b3';
+                if (correct[i].value === users[i].value) {
+                    correctCount++;
+                }else if(users[i].value) {
+                    document.querySelectorAll('label[for=' + users[i].value +']')[0].style.backgroundColor = '#ffb3b3';
+                }
+                
+            }
+            return correctCount;
+        }
+    </script>
+</body>
+
+</html>
