@@ -11,6 +11,8 @@
 
 #result {
     display: none;
+    margin: 10px auto;
+    width: 50%;
 }
 
 button[type="submit"] {
